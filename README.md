@@ -26,11 +26,11 @@ package.json
     
 Build config1
 
-    npm run task -- --config1 
+    npm run task -- --env.config1 
     
 Build config1 and config3
 
-    npm run task -- --config1 --config3
+    npm run task -- --env.config1 --env.config3
     
 Build all
 

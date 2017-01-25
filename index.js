@@ -1,9 +1,9 @@
 'use strict';
 
 
-var ARGS = process.argv.map(function (arg) {
-	return arg.replace(/^--/, '');
-});
+var ARGS = process.argv
+	.filter(function (a) { return a.search(/^--env./) > -1 })
+	.map(function (arg) { return arg.replace(/^--/, '')});
 
 
 module.exports = function (configs, options) {
