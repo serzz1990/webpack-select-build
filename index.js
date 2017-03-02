@@ -3,7 +3,7 @@
 
 var ARGS = process.argv
 	.filter(function (a) { return a.search(/^--env./) > -1 })
-	.map(function (arg) { return arg.replace(/^--/, '')});
+	.map(function (arg) { return arg.replace(/^--env./, '')});
 
 
 module.exports = function (configs, options) {
