@@ -7,10 +7,14 @@ main webpack.config.js
 
     var wsc = require('webpack-select-config');
     
+    // resolve path
+    // default: process.cwd()
+    wsc.resolvePath = process.cwd() + '/configs/'
+    
     var configs = {
-        config1 : require('/path1/webpack.config.js')
-        config2 : require('/path2/webpack.config.js')
-        config3 : require('/path3/webpack.config.js')
+        config1 : '/path1/webpack.config.js'
+        config2 : '/path2/webpack.config.js'
+        config3 : '/path3/webpack.config.js'
     };
     
     return wsc(configs);

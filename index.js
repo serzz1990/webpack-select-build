@@ -1,60 +1,79 @@
 'use strict';
 
-
+var path = require('path');
 var ARGS = process.argv
-	.filter(function (a) { return a.search(/^--env./) > -1 })
-	.map(function (arg) { return arg.replace(/^--env./, '')});
+    .filter(function (a) { return a.search(/^--env./) > -1 })
+    .map(function (arg) { return arg.replace(/^--env./, '')});
 
 
-module.exports = function (configs, options) {
-
-	configs = configs || {};
-	options = options || {log: true};
-
-	var output = [];
-	var entry_configs = ARGS.filter(function (arg) {
-		return configs[arg];
-	});
 
 
-	if (entry_configs.length == 1) {
+function getConfig (configs, key) {
 
-		if (options.log) {
-			console.log('[BUILD START]:', entry_configs[0]);
-			console.log('');
-		}
+    var configPath = path.resolve(WSC.resolvePath, configs[key]);
+    var config = require(configPath);
 
-		return configs[entry_configs[0]];
+    return typeof config == 'function'? config() : config;
 
-	}
+}
 
 
-	if (entry_configs > 1) {
+function WSC (configs, options) {
 
-		entry_configs.forEach(function(pack) {
+    configs = configs || {};
+    options = options || {log: true};
 
-			if (options.log) console.log('[BUILD START]:', pack);
-			output = output.concat(configs[pack]);
-
-		});
-
-		if (options.log) console.log('');
-
-		return configs;
-
-	}
+    var output = [];
+    var entry_configs = ARGS.filter(function (arg) {
+        return configs[arg];
+    });
 
 
-	for ( var name in configs ) {
+    if (entry_configs.length == 1) {
 
-		if (options.log) console.log('[BUILD START]:', name);
-		output = output.concat(configs[name]);
+        if (options.log) {
+            console.log('[BUILD START]:', entry_configs[0]);
+            console.log('');
+        }
 
-	}
+        return getConfig(configs, entry_configs[0]);
+
+    }
 
 
-	if (options.log) console.log('');
+    if (entry_configs > 1) {
 
-	return output;
+        entry_configs.forEach(function(pack) {
 
-};
+            if (options.log) console.log('[BUILD START]:', pack);
+            output = output.concat(getConfig(configs, pack));
+
+        });
+
+        if (options.log) console.log('');
+
+        return configs;
+
+    }
+
+
+    for (var name in configs) {
+
+        if (options.log) console.log('[BUILD START]:', name);
+        output = output.concat(getConfig(configs, name));
+
+    }
+
+
+    if (options.log) console.log('');
+
+    return output;
+
+}
+
+
+// resolve root path;
+WSC.resolvePath = process.cwd();
+
+
+module.exports = WSC;

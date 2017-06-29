@@ -1,9 +1,10 @@
 {
   "name": "webpack-select-config",
-  "version": "2.1.0",
+  "version": "3.0.0",
   "description": "",
   "author": "",
   "license": "ISC",
+  "main": "./index.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/serzz1990/webpack-select-build"
